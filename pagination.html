@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Page</title>
+		<meta charset="utf-8" />
+		<style>
+			/* global */
+
+			body {
+				background-color: #000;
+				color: #fff;
+				font-family: verdana, sans-serif;
+				font-size: 16px;
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+				height: 100vh;
+				margin: 0;
+			}
+
+			#page {
+				flex: 1;
+				padding: 20px;
+			}
+			
+			span {
+				cursor: pointer;
+				font-size: 2rem;
+				margin-left: 10px;
+			}
+			
+			.inactive {
+				cursor: default;
+				color: grey;
+			}
+			
+			.selected {
+				color: orange;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="page">				
+		</div>
+		<script type="module">
+			import { el, rand, sleep, qry, qryAll, log, sortDesc, renderColorText } from '../lib/lib.js';
+		
+			(function(count) {
+				const data = [];
+				const max = 6;
+				let selected = 1;
+				
+				function initData() {
+					data.push({
+						id: 'prev',
+						content: '&lt;',
+						active: false,
+						selected: false
+					});
+					
+					for (let i = 1; i <= max; i++) {
+						if (i  === max) {
+							data.push({
+								id: count,
+								content: count,
+								active: true,
+								selected: false
+							});
+						} else if (i === max - 1) {
+							data.push({
+								id: 'more',
+								content: '...',
+								active: false,
+								selected: false
+							});
+						} else {
+							data.push({
+								id: 'p' + i,
+								content: i,
+								active: true,
+								selected: false
+							});
+						}
+					}
+					
+					data.push({
+						id: 'next',
+						content: '&gt;',
+						active: true,
+						selected: false
+					});
+				}
+				
+				function renderControl() {
+					let tpl = '';
+				
+					data.forEach((item, i) => {
+						let cls;
+						
+						if (!item.active) {
+							cls = 'inactive';
+						} else if (item.id === 'p' + selected) {
+							cls = 'selected';
+						} else {
+							cls = '';
+						}
+						
+						tpl = `${tpl}<span id="${item.id}" class="${cls}">${item.content}</span>`;
+					});
+					
+					el('page').insert(tpl);
+				}
+				
+			
+				function init() {
+					initData();
+					renderControl();
+				}
+				
+				return {
+					init
+				};
+			})(10).init();
+		</script>
+	</body>
+</html>
